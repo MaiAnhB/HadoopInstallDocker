@@ -62,3 +62,7 @@ RUN sed -i "/^export JAVA_HOME/ s:.*:export JAVA_HOME=${JAVA_HOME}\nexport HADOO
 RUN sed -i '/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=$HADOOP_PREFIX/etc/hadoop/:' $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
 
 WORKDIR $HADOOP_HOME
+
+ADD bootstrap.sh /etc/bootstrap.sh
+RUN chmod 777 /etc/bootstrap.sh
+CMD ["/etc/bootstrap.sh", "-d"]
