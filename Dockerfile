@@ -7,10 +7,12 @@ LABEL maintainer2="daphne.lam@edu.ece.fr"
 # use root account 
 USER root
 
+
 # install required packages
 RUN apk update \
 && apk add ca-certificates wget \
 && update-ca-certificates
+
 RUN apk add --no-cache openssh openssl openjdk8-jre rsync bash procps nss
 
 # set JAVA_HOME environment variable
@@ -22,9 +24,11 @@ RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key
 RUN ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key
 RUN ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa
 RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
-RUN touch /root/.ssh/config
+
+ADD ssh_config /root/.ssh/config
 RUN chmod 600 /root/.ssh/config
 RUN chown root:root /root/.ssh/config
+
 RUN echo "Port 2122" >> /etc/ssh/sshd_config
 
 RUN passwd -u root
@@ -47,7 +51,7 @@ ENV HADOOP_YARN_HOME $HADOOP_HOME
 ENV HADOOP_CONF_DIR $HADOOP_HOME/etc/hadoop
 ENV YARN_CONF_DIR $HADOOP_PREFIX/etc/hadoop
 
-# add default config files which has one master and three workers
+# add default config files which has one master and three slaves
 ADD core-site.xml $HADOOP_HOME/etc/hadoop/core-site.xml
 ADD hdfs-site.xml $HADOOP_HOME/etc/hadoop/hdfs-site.xml
 ADD mapred-site.xml $HADOOP_HOME/etc/hadoop/mapred-site.xml
@@ -59,7 +63,3 @@ RUN sed -i "/^export JAVA_HOME/ s:.*:export JAVA_HOME=${JAVA_HOME}\nexport HADOO
 RUN sed -i '/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=$HADOOP_PREFIX/etc/hadoop/:' $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
 
 WORKDIR $HADOOP_HOME
-
-ADD bootstrap.sh /etc/bootstrap.sh
-RUN chmod 777 /etc/bootstrap.sh
-CMD ["/etc/bootstrap.sh", "-d"]
