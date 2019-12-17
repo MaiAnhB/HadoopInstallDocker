@@ -19,13 +19,17 @@ Hadoop Automatic Installation Docker
 	
     HadoopInstallDocker/Install/Scripts/start_slaves_nodes.sh
     
-5 - Wordcount test 
+5 - Run Wordcount test 
 
-    HadoopInstallDocker/Test/test_wordcount.sh
+    HadoopInstallDocker/Test/test_wordcount (commands to be run)
     
 6 - For more details, read our report
 
     HadoopInstallDocker/Report.pdf
+    
+To get permissions :
+
+	chmod 777 path/file_name
     
 # Authors
 
