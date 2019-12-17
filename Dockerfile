@@ -7,7 +7,6 @@ LABEL maintainer2="daphne.lam@edu.ece.fr"
 # use root account 
 USER root
 
-
 # install required packages
 RUN apk update \
 && apk add ca-certificates wget \
